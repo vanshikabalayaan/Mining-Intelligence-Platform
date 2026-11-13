@@ -24,6 +24,8 @@ The platform is built using a modern, scalable tech stack:
 
 The dashboard includes an AI module that identifies the rock type from a photo. A field operator uploads an image of a rock sample, and the platform returns the predicted rock type, a confidence score and a heatmap showing which part of the image the model focused on.
 
+![AI Rock Image Classification screen: a coal sample classified as Coal with 93.3% confidence](docs/images/classification-ui.webp)
+
 ### How it works
 
 1. **Upload**: a JPEG/PNG image is sent to the backend, optionally with mine name, region, GPS coordinates, operator and device ID.
@@ -59,6 +61,35 @@ The dashboard includes an AI module that identifies the rock type from a photo. 
 | Config | `model/model_config.json`, `model/class_names.json` |
 
 The model runs on GPU (CUDA) when one is available and falls back to CPU otherwise. It is loaded once as a singleton, so later requests stay fast.
+
+### Model selection & training
+
+Three ImageNet-pretrained CNNs were trained for 15 epochs on the same rock dataset split and compared on accuracy, size and speed:
+
+| Model | Val accuracy | Model size | Inference time | Result |
+|-------|--------------|------------|----------------|--------|
+| MobileNetV2 | 71.0% | 8.7 MB | 63.4 ms | Fastest and smallest, but least accurate |
+| ResNet50 | 72.6% | 90.0 MB | 244.6 ms | Heavy, with only a small accuracy gain |
+| **EfficientNetV2-S** | **78.16% (test)** | ~78 MB | | ✅ **Selected** |
+
+EfficientNetV2-S was trained with enhanced augmentation and then **fully fine-tuned**: all layers were unfrozen and trained with a very small learning rate, so its high-level features adapt to rock textures. This made it the most accurate of the three, so it is the model used in production.
+
+<details>
+<summary>📈 Training logs (click to expand)</summary>
+
+**EfficientNetV2-S: enhanced augmentation, then fine-tuning**
+
+![EfficientNetV2-S training log](docs/images/training-efficientnetv2.png)
+
+**ResNet50**
+
+![ResNet50 training log](docs/images/training-resnet50.png)
+
+**MobileNetV2**
+
+![MobileNetV2 training log](docs/images/training-mobilenetv2.png)
+
+</details>
 
 ### API endpoints
 
