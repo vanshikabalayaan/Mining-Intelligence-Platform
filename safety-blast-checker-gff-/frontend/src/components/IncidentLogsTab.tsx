@@ -112,7 +112,7 @@ export default function IncidentLogsTab() {
               <input
                 type="text" required value={loggedBy}
                 onChange={(e) => setLoggedBy(e.target.value)}
-                placeholder="e.g. Vineeta"
+                placeholder="e.g. Officer name"
                 className="bg-mining-dark border border-mining-border rounded-lg px-3 py-2 text-xs text-[var(--text)] focus:outline-none focus:border-mining-accent"
               />
             </div>

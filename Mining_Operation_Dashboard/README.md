@@ -1,6 +1,6 @@
 # Mining Operations Dashboard
 
-**Module Owner:** Vineeta
+**Module Owner:** Vanshika
 
 The **Mining Operations Dashboard** serves as the executive control centre for the entire Mining Intelligence Platform. It provides a unified, real-time view of operations by aggregating data from all integrated modules via secure REST APIs.
 

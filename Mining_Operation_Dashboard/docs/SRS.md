@@ -8,8 +8,8 @@ This document specifies the software requirements for the Mining Intelligence Pl
 
 #### 1.2 Scope
 The MIP system encompasses:
-- **AI Rock Image Classification Module** (Vineeta — Module 1): Automated geological classification of rock samples using deep learning with explainability analysis.
-- **Mining Operations Dashboard** (Vineeta — Module 2): Centralized executive command centre aggregating operational KPIs, safety metrics, equipment monitoring, and AI-generated insights.
+- **AI Rock Image Classification Module** (Vanshika — Module 1): Automated geological classification of rock samples using deep learning with explainability analysis.
+- **Mining Operations Dashboard** (Vanshika — Module 2): Centralized executive command centre aggregating operational KPIs, safety metrics, equipment monitoring, and AI-generated insights.
 
 #### 1.3 Definitions
 | Term | Definition |

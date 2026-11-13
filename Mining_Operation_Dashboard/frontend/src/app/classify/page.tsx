@@ -448,7 +448,7 @@ export default function ClassifyPage() {
                   type="text"
                   value={metadata.operator_name}
                   onChange={(e) => setMetadata({ ...metadata, operator_name: e.target.value })}
-                  placeholder="Vineeta"
+                  placeholder="Operator name"
                   className="w-full px-3 py-2 rounded-lg border text-sm outline-none transition-colors"
                   style={{ borderColor: "var(--color-border)", background: "var(--color-surface)", color: "var(--color-text-primary)" }}
                 />

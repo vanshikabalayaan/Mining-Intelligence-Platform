@@ -51,7 +51,7 @@ def seed_default_users(db: Session):
         db.add(officer)
     else:
         # Update existing user to match
-        officer.full_name = "Vineeta"
+        officer.full_name = "Vanshika"
     db.commit()
 
 # Dependency to check user
