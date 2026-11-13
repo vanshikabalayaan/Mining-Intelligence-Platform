@@ -6,20 +6,6 @@ The collective objective is to deliver an enterprise-grade, scalable, and extens
 
 At project completion, all six modules must interoperate through **secure REST APIs and shared authentication**, feeding into the Mining Operations Dashboard — the executive control centre of the entire platform.
 
-## 🧩 Modules & Ownership
-
-### Vineeta
-- **AI Rock Image Classification Module**: Machine learning models to classify rock types and assess ore grade qualities.
-- **Mining Operations Dashboard**: The executive control centre and live dashboard for tracking operational metrics.
-
-### Alok
-- **Blast Safety Checklist Module**
-- **Blast Design Optimisation Module**
-
-### Aryaman
-- **Equipment Monitoring Module**: Real-time telemetry data including utilization, fuel rates, temperature, and status for heavy machinery.
-- **Worker Safety Module**: Track active incidents, zone-specific risk indices, and worker distribution across different mining zones.
-
 ## 🏗️ Architecture & Infrastructure
 
 The platform is built using a modern, scalable tech stack:
