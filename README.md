@@ -20,6 +20,83 @@ The platform is built using a modern, scalable tech stack:
 - `model/`: AI/ML models responsible for rock classification and predictive insights.
 - `docs/`: Additional project documentation.
 
+## 🪨 AI Rock Image Classification
+
+The dashboard includes an AI module that identifies the rock type from a photo. A field operator uploads an image of a rock sample, and the platform returns the predicted rock type, a confidence score and a heatmap showing which part of the image the model focused on.
+
+### How it works
+
+1. **Upload**: a JPEG/PNG image is sent to the backend, optionally with mine name, region, GPS coordinates, operator and device ID.
+2. **Preprocessing**: the image is resized to **224 × 224**, converted to RGB and normalised with ImageNet mean/std.
+3. **Inference**: a fine-tuned **EfficientNetV2-S** (PyTorch) predicts one of 7 rock classes, and a softmax gives a probability for every class.
+4. **Explainability (Grad-CAM)**: gradients from the last convolutional block build a heatmap of the regions that drove the prediction. It is returned as a side-by-side view: original image, heatmap and overlay.
+5. **Insight**: a short geological explanation is added for the predicted rock, covering hardness, blastability and safety notes such as coal dust or silica dust.
+6. **Storage**: the API responds right away. In the background, the original and Grad-CAM images go to Cloudinary, the result to PostgreSQL and the full geological metadata to MongoDB.
+
+### Supported rock classes
+
+| Class | Type | Mining relevance |
+|-------|------|------------------|
+| Basalt | Igneous | Very hard, needs high-energy drill-and-blast |
+| Coal | Sedimentary | Combustible: watch for coal dust and methane |
+| Granite | Igneous | High strength, abrasive on crusher parts |
+| Limestone | Sedimentary | Moderate hardness, key for cement |
+| Marble | Metamorphic | Dimension stone, precise extraction |
+| Quartzite | Metamorphic | Very abrasive on drill bits |
+| Sandstone | Sedimentary | Moderate blastability, silica dust risk |
+
+### Model details
+
+| Property | Value |
+|----------|-------|
+| Architecture | EfficientNetV2-S (fine-tuned) |
+| Framework | PyTorch / torchvision |
+| Input size | 224 × 224 × 3 |
+| Classes | 7 |
+| Test accuracy | **78.16%** |
+| Explainability | Grad-CAM |
+| Weights | `Mining_Operation_Dashboard/model/best_model.pth` |
+| Config | `model/model_config.json`, `model/class_names.json` |
+
+The model runs on GPU (CUDA) when one is available and falls back to CPU otherwise. It is loaded once as a singleton, so later requests stay fast.
+
+### API endpoints
+
+All routes are under `/api/v1`:
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/classify/` | Upload an image (`file`) and get the prediction, confidence, all class probabilities and AI explanation |
+| `GET` | `/classify/results` | Paginated history, filterable by `mine_name`, `region` and `predicted_class` |
+| `GET` | `/classify/results/{id}` | A single classification result |
+| `GET` | `/classify/stats` | Total count and per-class distribution with average confidence |
+
+Example:
+
+```bash
+curl -X POST http://localhost:8000/api/v1/classify/ \
+  -F "file=@rock.jpg" \
+  -F "mine_name=North Pit" \
+  -F "region=Jharkhand"
+```
+
+Example response:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "predicted_class": "Granite",
+    "confidence": 0.9132,
+    "all_probabilities": { "Basalt": 0.021, "Granite": 0.9132, "...": "..." },
+    "gradcam_available": true,
+    "ai_explanation": "Granite is a coarse-grained intrusive igneous rock..."
+  }
+}
+```
+
+More detail is in [`Mining_Operation_Dashboard/docs/ai_model_documentation.md`](Mining_Operation_Dashboard/docs/ai_model_documentation.md).
+
 ## 🛠️ Getting Started
 
 ### Prerequisites
